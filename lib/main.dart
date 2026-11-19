@@ -10,6 +10,44 @@ const Color kMuted = Color(0xFF7A6F68);
 const Color kGreen = Color(0xFF2A9D8F);
 const Color kRed = Color(0xFFD62828);
 
+class MenuCepat {
+  final String nama;
+  final int harga;
+  final String gambar;
+
+  const MenuCepat({
+    required this.nama,
+    required this.harga,
+    required this.gambar,
+  });
+}
+
+const List<MenuCepat> kMenuCepat = [
+  MenuCepat(
+    nama: 'Magelangan',
+    harga: 14000,
+    gambar: 'assets/images/magelangan.jpg',
+  ),
+  MenuCepat(
+    nama: 'Es Teh',
+    harga: 4000,
+    gambar: 'assets/images/es_teh.jpg',
+  ),
+  MenuCepat(
+    nama: 'Gorengan',
+    harga: 1000,
+    gambar: 'assets/images/gorengan.jpg',
+  ),
+];
+
+String? gambarMenu(String nama) {
+  final n = nama.toLowerCase();
+  for (final menu in kMenuCepat) {
+    if (n.contains(menu.nama.toLowerCase())) return menu.gambar;
+  }
+  return null;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
@@ -757,6 +795,7 @@ class _BonDetailScreenState extends State<BonDetailScreen> {
               children: [
                 ...List.generate(bon.items.length, (index) {
                   final item = bon.items[index];
+                  final gambar = gambarMenu(item.nama);
                   return Column(
                     children: [
                       if (index > 0)
@@ -768,6 +807,18 @@ class _BonDetailScreenState extends State<BonDetailScreen> {
                         ),
                         child: Row(
                           children: [
+                            if (gambar != null) ...[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  gambar,
+                                  width: 48,
+                                  height: 48,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                            ],
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1112,22 +1163,21 @@ class _BonFormScreenState extends State<BonFormScreen> {
             style: TextStyle(fontSize: 12, color: kMuted),
           ),
           const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ActionChip(
-                label: const Text('Magelangan 14k'),
-                onPressed: () => _tambahCepat('Magelangan', 14000),
-              ),
-              ActionChip(
-                label: const Text('Es Teh 4k'),
-                onPressed: () => _tambahCepat('Es Teh', 4000),
-              ),
-              ActionChip(
-                label: const Text('Sate 10k'),
-                onPressed: () => _tambahCepat('Sate', 10000),
-              ),
+              for (var i = 0; i < kMenuCepat.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _MenuCepatCard(
+                    menu: kMenuCepat[i],
+                    onTap: () => _tambahCepat(
+                      kMenuCepat[i].nama,
+                      kMenuCepat[i].harga,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
           const SizedBox(height: 14),
@@ -1343,6 +1393,57 @@ class _QtyStepper extends StatelessWidget {
             padding: EdgeInsets.zero,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MenuCepatCard extends StatelessWidget {
+  final MenuCepat menu;
+  final VoidCallback onTap;
+
+  const _MenuCepatCard({required this.menu, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: Color(0x142D2A26)),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.asset(menu.gambar, height: 62, fit: BoxFit.cover),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(9, 7, 9, 9),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    menu.nama,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: kText,
+                    ),
+                  ),
+                  const SizedBox(height: 1),
+                  Text(
+                    rupiah(menu.harga),
+                    style: const TextStyle(fontSize: 11, color: kMuted),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

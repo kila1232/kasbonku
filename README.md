@@ -7,8 +7,9 @@ KasbonKu adalah aplikasi Flutter untuk mencatat kasbon (utang) pribadi saat memb
 **Demo online:** <https://kila1232.github.io/kasbonku/>
 
 <p align="center">
-  <img src="docs/screenshots/home.png" alt="Halaman utama KasbonKu" width="280" />
-  <img src="docs/screenshots/detail.png" alt="Detail bon dan rincian item" width="280" />
+  <img src="docs/screenshots/home.png" alt="Halaman utama KasbonKu" width="250" />
+  <img src="docs/screenshots/form.png" alt="Tambah bon dengan menu bergambar" width="250" />
+  <img src="docs/screenshots/detail.png" alt="Detail bon dan rincian item" width="250" />
 </p>
 
 ## Masalah yang diselesaikan
@@ -21,7 +22,7 @@ KasbonKu adalah aplikasi Flutter untuk mencatat kasbon (utang) pribadi saat memb
 ## Fitur
 
 - Catat bon baru: nama warung, item, qty, harga satuan, dan catatan.
-- Menu cepat untuk item yang sering dibeli (Magelangan, Es Teh, Sate).
+- Menu cepat bergambar: Magelangan Rp14.000, Es Teh Rp4.000, dan Gorengan Rp1.000.
 - Subtotal dan total dihitung otomatis.
 - Pembayaran penuh atau sebagian, dengan sisa dan status yang diperbarui otomatis.
 - Status bon: **Belum bayar**, **Dibayar sebagian**, dan **Lunas**.
